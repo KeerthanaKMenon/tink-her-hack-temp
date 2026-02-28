@@ -76,11 +76,9 @@ Open final.html directly in your browser
 
 #### Screenshots (Add at least 3)
 
-![Screenshot1](Add screenshot 1 here with proper name)
-*Add caption explaining what this shows*
+https://github.com/KeerthanaKMenon/tink-her-hack-temp/blob/main/Screenshot%202026-02-28%20180500.png(main screen)
 
-![Screenshot2](Add screenshot 2 here with proper name)
-*Add caption explaining what this shows*
+
 
 ![Screenshot3](Add screenshot 3 here with proper name)
 *Add caption explaining what this shows*
