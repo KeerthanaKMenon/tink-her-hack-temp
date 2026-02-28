@@ -80,6 +80,7 @@ https://github.com/KeerthanaKMenon/tink-her-hack-temp/blob/main/Screenshot%20202
 
 https://github.com/KeerthanaKMenon/tink-her-hack-temp/blob/main/Screenshot%202026-02-28%20180557.png (student dashboard)
 
+https://github.com/KeerthanaKMenon/tink-her-hack-temp/blob/main/Screenshot%202026-02-28%20180757.png (leaderboard)
 
 #### Diagrams
 
