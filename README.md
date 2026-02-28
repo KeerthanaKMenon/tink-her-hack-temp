@@ -78,9 +78,6 @@ Open final.html directly in your browser
 
 https://github.com/KeerthanaKMenon/tink-her-hack-temp/blob/main/Screenshot%202026-02-28%20180500.png(main screen)
 
-
-
-![Screenshot3](Add screenshot 3 here with proper name)
 *Add caption explaining what this shows*
 
 #### Diagrams
