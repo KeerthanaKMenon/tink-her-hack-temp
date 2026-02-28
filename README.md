@@ -78,6 +78,7 @@ Open index.html directly in your browser
 
 https://github.com/KeerthanaKMenon/tink-her-hack-temp/blob/main/Screenshot%202026-02-28%20180500.png(main screen)
 
+https://github.com/KeerthanaKMenon/tink-her-hack-temp/blob/main/Screenshot%202026-02-28%20180557.png (student dashboard)
 
 
 #### Diagrams
