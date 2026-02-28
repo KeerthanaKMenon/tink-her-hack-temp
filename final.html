@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickFix — Campus Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --amber:       #f59e0b;
+            --amber-dark:  #b45309;
+            --amber-deep:  #92400e;
+            --amber-soft:  #fef3c7;
+            --amber-mid:   #fde68a;
+            --ink:         #18120a;
+            --stone-dark:  #2c2420;
+            --stone-mid:   #6b5344;
+            --stone-light: #c4a882;
+            --cream:       #fdf8f0;
+            --cream-dark:  #f5ece0;
+            --white:       #ffffff;
+            --border:      #e8ddd0;
+            --green:       #16a34a;
+            --green-soft:  #dcfce7;
+            --blue:        #2563eb;
+            --blue-soft:   #eff6ff;
+            --purple:      #7c3aed;
+            --purple-soft: #f5f3ff;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--cream);
+            color: var(--ink);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none; z-index: 9999; opacity: 0.4;
+        }
+
+        .hidden { display: none !important; }
+
+        @keyframes fadeUp   { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes fadeIn   { from { opacity:0; } to { opacity:1; } }
+        @keyframes slideDown{ from { opacity:0; transform:translateY(-12px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes pulse-dot{ 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.5;transform:scale(.8);} }
+        @keyframes shimmer  { 0%{background-position:-200% center;} 100%{background-position:200% center;} }
+        @keyframes pop      { 0%{transform:scale(1);} 50%{transform:scale(1.15);} 100%{transform:scale(1);} }
+
+        /* ══════════════ HOME ══════════════ */
+        #screen-home {
+            min-height:100vh; display:flex; flex-direction:column;
+            align-items:center; justify-content:center; padding:24px;
+            background:
+                radial-gradient(ellipse 80% 60% at 60% 20%, rgba(245,158,11,.14) 0%, transparent 65%),
+                radial-gradient(ellipse 50% 50% at 20% 90%, rgba(180,83,9,.08) 0%, transparent 65%),
+                var(--cream);
+            animation:fadeIn .4s ease;
+        }
+        .home-eyebrow {
+            font-size:11px; font-weight:600; letter-spacing:.16em; text-transform:uppercase;
+            color:var(--amber-dark); background:var(--amber-soft); border:1px solid var(--amber-mid);
+            padding:5px 16px; border-radius:100px; margin-bottom:28px;
+            animation:fadeUp .5s .05s ease both;
+        }
+        .home-logo {
+            font-family:'Instrument Serif',serif; font-size:clamp(64px,13vw,112px);
+            color:var(--ink); letter-spacing:-.03em; line-height:.95; text-align:center;
+            animation:fadeUp .55s .1s ease both;
+        }
+        .home-logo em { font-style:italic; color:var(--amber-dark); }
+        .home-sub {
+            font-size:15px; color:var(--stone-mid); font-weight:400;
+            margin-top:16px; margin-bottom:48px; animation:fadeUp .55s .15s ease both;
+        }
+        .home-actions { display:flex; gap:12px; flex-wrap:wrap; justify-content:center; animation:fadeUp .55s .2s ease both; }
+        .home-divider { width:60px; height:1px; background:linear-gradient(90deg,transparent,var(--amber),transparent); margin:32px auto 0; animation:fadeUp .55s .25s ease both; }
+
+        /* ══════════════ BUTTONS ══════════════ */
+        .btn-primary {
+            background:var(--ink); color:var(--white); padding:14px 32px; border-radius:12px;
+            font-size:14px; font-weight:600; letter-spacing:.02em; border:none; cursor:pointer;
+            transition:all .2s ease; font-family:'DM Sans',sans-serif; position:relative; overflow:hidden;
+        }
+        .btn-primary::after { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(255,255,255,.08) 0%,transparent 60%); pointer-events:none; }
+        .btn-primary:hover { background:var(--amber-dark); transform:translateY(-2px); box-shadow:0 8px 24px rgba(180,83,9,.25); }
+        .btn-outline {
+            background:transparent; color:var(--ink); padding:14px 32px; border-radius:12px;
+            font-size:14px; font-weight:500; border:1.5px solid var(--border); cursor:pointer;
+            transition:all .2s ease; font-family:'DM Sans',sans-serif;
+        }
+        .btn-outline:hover { border-color:var(--ink); background:var(--ink); color:white; transform:translateY(-2px); }
+        .btn-ghost { background:none; border:none; color:var(--stone-mid); font-size:13px; cursor:pointer; font-family:'DM Sans',sans-serif; padding:8px 0; transition:color .15s; }
+        .btn-ghost:hover { color:var(--ink); }
+
+        /* ══════════════ LOGIN ══════════════ */
+        .login-screen {
+            min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px;
+            background:radial-gradient(ellipse 60% 50% at 50% 40%,rgba(245,158,11,.1) 0%,transparent 70%),var(--cream);
+            animation:fadeIn .3s ease;
+        }
+        .login-card {
+            background:var(--white); border-radius:24px; padding:40px 36px; width:100%; max-width:400px;
+            border:1px solid var(--border);
+            box-shadow:0 2px 4px rgba(0,0,0,.04),0 12px 40px rgba(0,0,0,.08),0 0 0 1px rgba(255,255,255,.8) inset;
+            animation:fadeUp .4s ease;
+        }
+        .login-icon { width:52px; height:52px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:22px; margin:0 auto 20px; }
+        .login-icon-amber { background:var(--amber-soft); }
+        .login-icon-dark  { background:var(--stone-dark); }
+        .login-title { font-family:'Instrument Serif',serif; font-size:26px; text-align:center; color:var(--ink); margin-bottom:6px; letter-spacing:-.02em; }
+        .login-sub   { font-size:13px; color:var(--stone-mid); text-align:center; margin-bottom:28px; }
+        .field-group { margin-bottom:16px; }
+        .field-label { font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--stone-mid); display:block; margin-bottom:6px; }
+        .field-input { width:100%; border:1.5px solid var(--border); background:var(--cream); border-radius:10px; padding:12px 14px; font-size:14px; font-family:'DM Sans',sans-serif; color:var(--ink); outline:none; transition:border-color .15s,background .15s; }
+        .field-input:focus { border-color:var(--amber); background:var(--white); box-shadow:0 0 0 3px rgba(245,158,11,.12); }
+        .field-input::placeholder { color:var(--stone-light); }
+
+        /* ══════════════ DASHBOARD SHELL ══════════════ */
+        #screen-dash { min-height:100vh; display:flex; flex-direction:column; }
+        .dash-nav {
+            background:var(--white); border-bottom:1px solid var(--border); padding:0 32px; height:64px;
+            display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:50;
+            box-shadow:0 1px 12px rgba(0,0,0,.04);
+        }
+        .dash-nav-brand { font-family:'Instrument Serif',serif; font-size:22px; color:var(--ink); letter-spacing:-.02em; }
+        .dash-nav-brand em { font-style:italic; color:var(--amber-dark); }
+        .dash-nav-right { display:flex; align-items:center; gap:10px; }
+
+        /* Tab bar */
+        .tab-bar {
+            display:flex; gap:4px; background:var(--cream-dark); border:1px solid var(--border);
+            border-radius:10px; padding:3px;
+        }
+        .tab-btn {
+            padding:6px 16px; border-radius:8px; font-size:12px; font-weight:600; border:none;
+            cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .18s; color:var(--stone-mid);
+            background:transparent;
+        }
+        .tab-btn.active { background:var(--white); color:var(--ink); box-shadow:0 1px 4px rgba(0,0,0,.08); }
+
+        .user-chip { display:flex; align-items:center; gap:8px; background:var(--cream-dark); border:1px solid var(--border); border-radius:100px; padding:6px 14px; font-size:12px; font-weight:500; color:var(--stone-mid); }
+        .user-chip-dot { width:7px; height:7px; background:var(--amber); border-radius:50%; animation:pulse-dot 2s infinite; }
+        .btn-logout { background:var(--cream-dark); color:var(--stone-mid); border:1.5px solid var(--border); border-radius:10px; padding:9px 16px; font-size:13px; font-weight:500; font-family:'DM Sans',sans-serif; cursor:pointer; transition:all .15s; }
+        .btn-logout:hover { border-color:var(--ink); color:var(--ink); }
+
+        .dash-body { display:flex; flex:1; }
+
+        /* Admin sidebar (overdue) */
+        .dash-sidebar { width:280px; flex-shrink:0; background:var(--white); border-right:1px solid var(--border); padding:28px 20px; display:none; overflow-y:auto; }
+        .dash-sidebar.show { display:block; }
+        .sidebar-title { font-size:11px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--stone-mid); margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+        .sidebar-badge { background:#fee2e2; color:#b91c1c; font-size:10px; padding:2px 7px; border-radius:100px; font-weight:700; }
+        .overdue-card { background:#fff7ed; border:1px solid #fed7aa; border-left:3px solid #f97316; border-radius:10px; padding:12px 14px; margin-bottom:10px; }
+        .overdue-card-title { font-size:13px; font-weight:600; color:var(--ink); margin-bottom:3px; }
+        .overdue-card-days  { font-size:11px; color:#c2410c; font-weight:500; }
+
+        /* Main panel */
+        .dash-main { flex:1; padding:32px 40px; max-width:960px; }
+        .tab-panel { display:none; }
+        .tab-panel.active { display:block; animation:fadeIn .25s ease; }
+
+        .dash-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:28px; flex-wrap:wrap; gap:16px; }
+        .dash-title   { font-family:'Instrument Serif',serif; font-size:32px; color:var(--ink); letter-spacing:-.02em; line-height:1.1; }
+        .dash-subtitle{ font-size:13px; color:var(--stone-mid); margin-top:4px; }
+        .dash-controls{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+
+        .select-styled {
+            appearance:none;
+            background:var(--white) url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%236b5344' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 12px center;
+            border:1.5px solid var(--border); border-radius:10px; padding:9px 34px 9px 14px;
+            font-size:13px; font-family:'DM Sans',sans-serif; color:var(--ink); cursor:pointer; outline:none;
+        }
+        .select-styled:focus { border-color:var(--amber); }
+
+        .btn-add-new { background:var(--amber-dark); color:white; border:none; border-radius:10px; padding:9px 18px; font-size:13px; font-weight:600; font-family:'DM Sans',sans-serif; cursor:pointer; transition:all .18s; display:flex; align-items:center; gap:6px; box-shadow:0 2px 8px rgba(180,83,9,.2); }
+        .btn-add-new:hover { background:var(--amber); transform:translateY(-1px); box-shadow:0 4px 14px rgba(180,83,9,.3); }
+
+        /* ══════════════ FORM + DUPLICATE DETECTOR ══════════════ */
+        .complaint-form { background:var(--white); border:1.5px solid var(--amber); border-radius:16px; padding:24px; margin-bottom:28px; box-shadow:0 4px 20px rgba(245,158,11,.1); animation:slideDown .25s ease; }
+        .form-title { font-size:13px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--amber-dark); margin-bottom:16px; }
+        .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+        @media(max-width:600px){.form-grid{grid-template-columns:1fr;}}
+        .form-input { border:1.5px solid var(--border); background:var(--cream); border-radius:10px; padding:11px 14px; font-size:13px; font-family:'DM Sans',sans-serif; color:var(--ink); outline:none; width:100%; transition:border-color .15s,background .15s; }
+        .form-input:focus { border-color:var(--amber); background:var(--white); }
+        .form-input::placeholder { color:var(--stone-light); }
+        .form-textarea { resize:none; grid-column:1/-1; height:80px; }
+        .btn-submit { background:var(--amber-dark); color:white; border:none; border-radius:10px; padding:11px 24px; font-size:13px; font-weight:600; font-family:'DM Sans',sans-serif; cursor:pointer; transition:all .18s; }
+        .btn-submit:hover { background:var(--amber); }
+
+        /* Duplicate warning box */
+        #dup-warning {
+            grid-column:1/-1; background:#fffbeb; border:1.5px solid #fde68a;
+            border-radius:12px; padding:14px 16px; display:none;
+        }
+        #dup-warning .dup-title { font-size:12px; font-weight:700; color:var(--amber-deep); margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+        .dup-item {
+            display:flex; align-items:center; justify-content:space-between; gap:8px;
+            background:var(--white); border:1px solid var(--border); border-radius:8px;
+            padding:9px 12px; margin-bottom:6px; cursor:pointer; transition:border-color .15s;
+        }
+        .dup-item:hover { border-color:var(--amber); }
+        .dup-item-title { font-size:12px; font-weight:600; color:var(--ink); }
+        .dup-item-meta  { font-size:11px; color:var(--stone-mid); }
+        .dup-vote-btn   { background:var(--amber-soft); border:1px solid var(--amber-mid); border-radius:6px; padding:4px 10px; font-size:11px; font-weight:700; color:var(--amber-dark); cursor:pointer; white-space:nowrap; transition:background .15s; font-family:'DM Sans',sans-serif; }
+        .dup-vote-btn:hover { background:var(--amber-mid); }
+        .dup-dismiss    { font-size:11px; color:var(--stone-mid); cursor:pointer; text-decoration:underline; margin-top:4px; display:inline-block; }
+
+        /* ══════════════ COMPLAINT CARDS ══════════════ */
+        .card-list { display:flex; flex-direction:column; gap:12px; }
+        .complaint-card { background:var(--white); border-radius:16px; padding:20px; display:flex; gap:16px; border:1px solid var(--border); box-shadow:0 1px 3px rgba(0,0,0,.04); transition:box-shadow .2s,transform .2s; animation:fadeUp .3s ease both; }
+        .complaint-card:hover { box-shadow:0 4px 20px rgba(0,0,0,.08); transform:translateY(-1px); }
+        .complaint-card.overdue { border-color:#fdba74; background:linear-gradient(135deg,#fff7ed 0%,var(--white) 60%); }
+
+        .vote-box { display:flex; flex-direction:column; align-items:center; justify-content:center; min-width:52px; background:var(--cream-dark); border:1px solid var(--border); border-radius:12px; padding:10px 8px; gap:4px; flex-shrink:0; }
+        .vote-btn { background:none; border:none; cursor:pointer; font-size:16px; color:var(--stone-light); transition:color .15s,transform .15s; line-height:1; padding:2px; }
+        .vote-btn:hover { color:var(--amber-dark); transform:translateY(-2px); }
+        .vote-btn.voted { color:var(--amber-dark); animation:pop .3s ease; }
+        .vote-count { font-size:18px; font-weight:700; color:var(--amber-dark); font-family:'Instrument Serif',serif; line-height:1; }
+        .vote-label { font-size:9px; font-weight:600; text-transform:uppercase; letter-spacing:.06em; color:var(--stone-light); }
+
+        .card-content { flex:1; min-width:0; }
+        .card-header  { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:6px; }
+        .card-title   { font-size:15px; font-weight:600; color:var(--ink); line-height:1.3; }
+        .status-pill  { font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; padding:4px 10px; border-radius:100px; flex-shrink:0; }
+        .status-open     { background:#fff7ed; color:#c2410c; border:1px solid #fed7aa; }
+        .status-progress { background:#fefce8; color:#a16207; border:1px solid #fde047; }
+        .status-resolved { background:#f0fdf4; color:#15803d; border:1px solid #bbf7d0; }
+        .card-desc    { font-size:13px; color:var(--stone-mid); line-height:1.5; margin-bottom:12px; }
+        .card-footer  { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; }
+        .card-meta    { font-size:11px; color:var(--stone-light); display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+        .card-meta-item { display:flex; align-items:center; gap:4px; }
+        .card-actions { display:flex; gap:6px; }
+        .btn-status   { font-size:11px; font-weight:600; padding:5px 12px; border-radius:8px; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .15s; }
+        .btn-in-progress { background:#fefce8; color:#a16207; border:1px solid #fde047; }
+        .btn-in-progress:hover { background:#fef08a; }
+        .btn-resolve     { background:#f0fdf4; color:#15803d; border:1px solid #bbf7d0; }
+        .btn-resolve:hover { background:#dcfce7; }
+
+        /* Reporter badge on card */
+        .reporter-chip { display:inline-flex; align-items:center; gap:4px; background:var(--purple-soft); border:1px solid #ddd6fe; border-radius:100px; padding:2px 8px; font-size:10px; font-weight:600; color:var(--purple); }
+
+        /* ══════════════ LEADERBOARD TAB ══════════════ */
+        .leaderboard-header { margin-bottom:28px; }
+        .leaderboard-desc   { font-size:13px; color:var(--stone-mid); margin-top:6px; line-height:1.5; }
+
+        .points-explainer {
+            display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:10px; margin-bottom:28px;
+        }
+        .points-rule {
+            background:var(--white); border:1px solid var(--border); border-radius:12px; padding:14px 16px;
+            display:flex; align-items:center; gap:10px;
+        }
+        .points-rule-icon { font-size:20px; }
+        .points-rule-label { font-size:12px; color:var(--stone-mid); line-height:1.3; }
+        .points-rule-val   { font-size:15px; font-weight:700; color:var(--amber-dark); font-family:'Instrument Serif',serif; }
+
+        .lb-list { display:flex; flex-direction:column; gap:10px; }
+
+        .lb-row {
+            background:var(--white); border:1px solid var(--border); border-radius:16px; padding:16px 20px;
+            display:flex; align-items:center; gap:16px; transition:transform .18s, box-shadow .18s;
+            animation:fadeUp .3s ease both;
+        }
+        .lb-row:hover { transform:translateY(-2px); box-shadow:0 4px 20px rgba(0,0,0,.07); }
+        .lb-row.rank-1 { background:linear-gradient(135deg,#fffbeb,var(--white)); border-color:#fde68a; }
+        .lb-row.rank-2 { background:linear-gradient(135deg,#f8fafc,var(--white)); border-color:#e2e8f0; }
+        .lb-row.rank-3 { background:linear-gradient(135deg,#fff7ed,var(--white)); border-color:#fed7aa; }
+        .lb-row.is-me  { border-color:var(--amber); box-shadow:0 0 0 2px rgba(245,158,11,.15); }
+
+        .lb-rank { font-family:'Instrument Serif',serif; font-size:22px; font-weight:700; min-width:36px; text-align:center; }
+        .rank-1 .lb-rank { color:#d97706; }
+        .rank-2 .lb-rank { color:#94a3b8; }
+        .rank-3 .lb-rank { color:#c2410c; }
+
+        .lb-avatar {
+            width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center;
+            font-size:15px; font-weight:700; flex-shrink:0;
+            background:linear-gradient(135deg,var(--amber-soft),var(--cream-dark));
+            color:var(--amber-dark); border:1px solid var(--amber-mid);
+        }
+
+        .lb-info { flex:1; min-width:0; }
+        .lb-name { font-size:14px; font-weight:600; color:var(--ink); display:flex; align-items:center; gap:8px; }
+        .lb-badges { display:flex; gap:4px; flex-wrap:wrap; margin-top:4px; }
+        .badge {
+            font-size:10px; font-weight:600; padding:2px 8px; border-radius:100px;
+            display:inline-flex; align-items:center; gap:3px;
+        }
+        .badge-gold     { background:#fef3c7; color:#92400e; border:1px solid #fde68a; }
+        .badge-reporter { background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; }
+        .badge-advocate { background:#f0fdf4; color:#15803d; border:1px solid #bbf7d0; }
+        .badge-champion { background:#f5f3ff; color:#6d28d9; border:1px solid #ddd6fe; }
+        .badge-newcomer { background:#fff7ed; color:#c2410c; border:1px solid #fed7aa; }
+        .me-tag { background:var(--amber-soft); color:var(--amber-dark); border:1px solid var(--amber-mid); font-size:10px; font-weight:700; padding:2px 7px; border-radius:100px; }
+
+        .lb-points-col { text-align:right; }
+        .lb-points { font-family:'Instrument Serif',serif; font-size:24px; font-weight:700; color:var(--amber-dark); line-height:1; }
+        .lb-points-label { font-size:10px; color:var(--stone-light); font-weight:600; text-transform:uppercase; letter-spacing:.06em; }
+
+        /* My stats card */
+        .my-stats {
+            background:var(--white); border:1.5px solid var(--amber-mid); border-radius:16px; padding:20px 24px;
+            margin-bottom:24px; display:flex; gap:24px; flex-wrap:wrap; align-items:center;
+        }
+        .my-stats-title { font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:.08em; color:var(--stone-mid); margin-bottom:12px; }
+        .stat-chip { background:var(--cream-dark); border:1px solid var(--border); border-radius:10px; padding:10px 16px; text-align:center; }
+        .stat-chip-val   { font-family:'Instrument Serif',serif; font-size:22px; font-weight:700; color:var(--amber-dark); }
+        .stat-chip-label { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:.06em; color:var(--stone-light); }
+
+        /* Empty states */
+        .empty-state { text-align:center; padding:60px 20px; color:var(--stone-light); }
+        .empty-icon  { font-size:40px; margin-bottom:12px; }
+        .empty-text  { font-size:14px; }
+
+        /* Responsive */
+        @media(max-width:768px){
+            .dash-sidebar.show{width:100%;border-right:none;border-bottom:1px solid var(--border);}
+            .dash-body{flex-direction:column;}
+            .dash-main{padding:20px 16px;}
+            .dash-nav{padding:0 16px;}
+            .tab-btn{padding:6px 10px; font-size:11px;}
+        }
+    </style>
+</head>
+<body>
+
+<!-- ════════════════ HOME ════════════════ -->
+<div id="screen-home" class="hidden">
+    <span class="home-eyebrow">Campus Maintenance Portal</span>
+    <h1 class="home-logo">Quick<em>Fix</em></h1>
+    <p class="home-sub">Report issues. Track progress. Keep campus running.</p>
+    <div class="home-actions">
+        <button onclick="showScreen('student-login')" class="btn-primary">Student Login</button>
+        <button onclick="showScreen('admin-login')"   class="btn-outline">Admin Panel</button>
+    </div>
+    <div class="home-divider"></div>
+</div>
+
+<!-- ════════════════ STUDENT LOGIN ════════════════ -->
+<div id="screen-student-login" class="login-screen hidden">
+    <div class="login-card">
+        <div class="login-icon login-icon-amber">🎓</div>
+        <h2 class="login-title">Student Portal</h2>
+        <p class="login-sub">Enter your Student ID to access the dashboard</p>
+        <div class="field-group">
+            <label class="field-label">Student ID</label>
+            <input type="text" id="stu-id-input" placeholder="e.g. STU101" class="field-input">
+        </div>
+        <button onclick="authStudent()" class="btn-primary" style="width:100%;margin-bottom:12px;">Access Dashboard →</button>
+        <button onclick="showScreen('home')" class="btn-ghost" style="width:100%;text-align:center;">← Back to Home</button>
+    </div>
+</div>
+
+<!-- ════════════════ ADMIN LOGIN ════════════════ -->
+<div id="screen-admin-login" class="login-screen hidden">
+    <div class="login-card">
+        <div class="login-icon login-icon-dark" style="color:white;">🔐</div>
+        <h2 class="login-title">Admin Access</h2>
+        <p class="login-sub">Maintenance officer verification</p>
+        <div class="field-group">
+            <label class="field-label">Password</label>
+            <input type="password" id="admin-pass-input" placeholder="Enter admin password" class="field-input">
+        </div>
+        <button onclick="authAdmin()" class="btn-primary" style="width:100%;margin-bottom:12px;background:var(--stone-dark);">Verify Identity →</button>
+        <button onclick="showScreen('home')" class="btn-ghost" style="width:100%;text-align:center;">← Back to Home</button>
+    </div>
+</div>
+
+<!-- ════════════════ DASHBOARD ════════════════ -->
+<div id="screen-dash" class="hidden">
+
+    <nav class="dash-nav">
+        <span class="dash-nav-brand">Quick<em>Fix</em></span>
+        <div class="dash-nav-right">
+            <!-- Tab switcher -->
+            <div class="tab-bar">
+                <button class="tab-btn active" id="tab-btn-complaints" onclick="switchTab('complaints')">📋 Complaints</button>
+                <button class="tab-btn"        id="tab-btn-leaderboard" onclick="switchTab('leaderboard')">🏆 Leaderboard</button>
+            </div>
+            <div class="user-chip">
+                <span class="user-chip-dot"></span>
+                <span id="user-info-chip">—</span>
+            </div>
+            <button onclick="location.reload()" class="btn-logout">Logout</button>
+        </div>
+    </nav>
+
+    <div class="dash-body">
+
+        <!-- Admin Overdue Sidebar -->
+        <aside id="admin-sidebar" class="dash-sidebar">
+            <div class="sidebar-title">
+                <span>Overdue</span>
+                <span class="sidebar-badge">10+ days</span>
+            </div>
+            <div id="overdue-list"></div>
+            <div id="overdue-empty" class="empty-state hidden" style="padding:20px 0;">
+                <div class="empty-icon">✅</div>
+                <div class="empty-text" style="font-size:12px;">No overdue items</div>
+            </div>
+        </aside>
+
+        <main class="dash-main">
+
+            <!-- ── COMPLAINTS TAB ── -->
+            <div id="tab-complaints" class="tab-panel active">
+                <div class="dash-header">
+                    <div>
+                        <h2 class="dash-title" id="dash-heading">Complaints Board</h2>
+                        <p class="dash-subtitle" id="user-info">Loading…</p>
+                    </div>
+                    <div class="dash-controls">
+                        <select id="filter-loc" onchange="renderUI()" class="select-styled">
+                            <option value="All">All Locations</option>
+                            <option value="Department – CSE">Dept — CSE</option>
+                            <option value="Department – EC">Dept — EC</option>
+                            <option value="Department – MECH">Dept — MECH</option>
+                            <option value="Department – CIVIL">Dept — CIVIL</option>
+                            <option value="Hostel">Hostel</option>
+                            <option value="Science Block">Science Block</option>
+                            <option value="Main Block">Main Block</option>
+                            <option value="Canteen">Canteen</option>
+                        </select>
+                        <button id="btn-add" onclick="toggleForm()" class="btn-add-new">
+                            <span>+</span> New Complaint
+                        </button>
+                    </div>
+                </div>
+
+                <!-- New Complaint Form with Duplicate Detector -->
+                <div id="form-container" class="complaint-form hidden">
+                    <div class="form-title">📋 New Complaint</div>
+                    <div class="form-grid">
+                        <input type="text" id="f-title" placeholder="Issue title (e.g. Broken Light)"
+                               class="form-input" oninput="checkDuplicates()">
+                        <select id="f-loc" class="form-input">
+                            <optgroup label="Departments">
+                                <option value="Department – CSE">CSE Department</option>
+                                <option value="Department – EC">EC Department</option>
+                                <option value="Department – MECH">MECH Department</option>
+                                <option value="Department – CIVIL">CIVIL Department</option>
+                            </optgroup>
+                            <optgroup label="Physical Locations">
+                                <option value="Hostel">Hostel</option>
+                                <option value="Science Block">Science Block</option>
+                                <option value="Main Block">Main Block</option>
+                                <option value="Canteen">Canteen</option>
+                            </optgroup>
+                        </select>
+
+                        <!-- ★ Duplicate Warning Box -->
+                        <div id="dup-warning">
+                            <div class="dup-title">⚠️ Similar issues already reported — upvote instead?</div>
+                            <div id="dup-items"></div>
+                            <span class="dup-dismiss" onclick="dismissDup()">No, I'll file a new one anyway →</span>
+                        </div>
+
+                        <textarea id="f-desc" placeholder="Briefly describe the problem…" class="form-input form-textarea"></textarea>
+                        <button onclick="sendToFirebase()" class="btn-submit" id="submit-btn">Submit Complaint →</button>
+                    </div>
+                </div>
+
+                <div id="main-list" class="card-list"></div>
+            </div>
+
+            <!-- ── LEADERBOARD TAB ── -->
+            <div id="tab-leaderboard" class="tab-panel">
+                <div class="leaderboard-header">
+                    <h2 class="dash-title">🏆 Reporter Leaderboard</h2>
+                    <p class="leaderboard-desc">Students earn points for filing complaints and getting community support. Top reporters keep the campus running!</p>
+                </div>
+
+                <!-- Points explainer -->
+                <div class="points-explainer">
+                    <div class="points-rule">
+                        <span class="points-rule-icon">📝</span>
+                        <div>
+                            <div class="points-rule-val">+10 pts</div>
+                            <div class="points-rule-label">Filing a complaint</div>
+                        </div>
+                    </div>
+                    <div class="points-rule">
+                        <span class="points-rule-icon">✅</span>
+                        <div>
+                            <div class="points-rule-val">+25 pts</div>
+                            <div class="points-rule-label">Your complaint resolved</div>
+                        </div>
+                    </div>
+                    <div class="points-rule">
+                        <span class="points-rule-icon">▲</span>
+                        <div>
+                            <div class="points-rule-val">+3 pts</div>
+                            <div class="points-rule-label">Per upvote received</div>
+                        </div>
+                    </div>
+                    <div class="points-rule">
+                        <span class="points-rule-icon">🗳️</span>
+                        <div>
+                            <div class="points-rule-val">+2 pts</div>
+                            <div class="points-rule-label">Per vote you cast</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- My stats (only for students) -->
+                <div id="my-stats-box" class="my-stats hidden">
+                    <div style="flex:1">
+                        <div class="my-stats-title">Your Stats</div>
+                        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                            <div class="stat-chip"><div class="stat-chip-val" id="my-pts">—</div><div class="stat-chip-label">Points</div></div>
+                            <div class="stat-chip"><div class="stat-chip-val" id="my-filed">—</div><div class="stat-chip-label">Filed</div></div>
+                            <div class="stat-chip"><div class="stat-chip-val" id="my-resolved">—</div><div class="stat-chip-label">Resolved</div></div>
+                            <div class="stat-chip"><div class="stat-chip-val" id="my-votes-cast">—</div><div class="stat-chip-label">Votes Cast</div></div>
+                        </div>
+                    </div>
+                    <div id="my-badges-box" style="flex-shrink:0;"></div>
+                </div>
+
+                <div id="lb-list" class="lb-list"></div>
+            </div>
+
+        </main>
+    </div>
+</div>
+
+<!-- ════════════════ FIREBASE SCRIPT ════════════════ -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+    import {
+        getFirestore, collection, addDoc, updateDoc, doc,
+        onSnapshot, query, orderBy, serverTimestamp, increment, arrayUnion, Timestamp
+    } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyAptNDz-tWxIq-UpCkPabuQHTWyfRuw8Hk",
+        authDomain: "quick-fix-4eb11.firebaseapp.com",
+        projectId: "quick-fix-4eb11",
+        storageBucket: "quick-fix-4eb11.firebasestorage.app",
+        messagingSenderId: "1097379155157",
+        appId: "1:1097379155157:web:ed052b62f8a6e19336a65c"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db  = getFirestore(app);
+
+    // ── Seed record ──────────────────────────────────────────
+    async function seedRecord() {
+        if (localStorage.getItem('qf_seeded_v2')) return;
+        try {
+            await addDoc(collection(db, "complaints"), {
+                title: "Water Leakage in Corridor",
+                location: "Main Block",
+                description: "Persistent water leakage near the staircase on 2nd floor. Floor is slippery — safety hazard for students.",
+                votes: 7, status: "In Progress",
+                createdAt: Timestamp.fromDate(new Date('2026-02-01T09:30:00')),
+                votedBy: ["STU101","STU102","STU103","STU104","STU105","STU106","STU107"],
+                studentId: "STU101"
+            });
+            localStorage.setItem('qf_seeded_v2','1');
+        } catch(e){ console.warn("Seed skipped:",e.message); }
+    }
+    seedRecord();
+
+    // ── State ────────────────────────────────────────────────
+    let userType = null, currentUserId = null;
+    let allComplaints = [], complaintsMap = {};
+    let dupDismissed  = false;
+
+    // ── Navigation ───────────────────────────────────────────
+    window.showScreen = (id) => {
+        document.querySelectorAll('[id^="screen-"]').forEach(s => s.classList.add('hidden'));
+        document.getElementById(`screen-${id}`).classList.remove('hidden');
+    };
+    showScreen('home');
+
+    // ── Tab switching ────────────────────────────────────────
+    window.switchTab = (tab) => {
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(`tab-${tab}`).classList.add('active');
+        document.getElementById(`tab-btn-${tab}`).classList.add('active');
+        if (tab === 'leaderboard') renderLeaderboard();
+    };
+
+    // ── Auth ─────────────────────────────────────────────────
+    window.authStudent = () => {
+        const id = document.getElementById('stu-id-input').value.trim();
+        if (id.length < 2) return alert("Enter a valid Student ID");
+        currentUserId = id.toUpperCase();
+        userType = 'student';
+        initDash();
+    };
+    window.authAdmin = () => {
+        const pass = document.getElementById('admin-pass-input').value;
+        if (pass === "admin123") { currentUserId = "Maintenance_Officer"; userType = 'admin'; initDash(); }
+        else alert("Incorrect password.");
+    };
+
+    function initDash() {
+        showScreen('dash');
+        document.getElementById('user-info').innerText      = `${userType==='admin'?'🔧 Admin':'🎓 Student'} · ${currentUserId}`;
+        document.getElementById('user-info-chip').innerText = currentUserId;
+        if (userType === 'admin') {
+            document.getElementById('admin-sidebar').classList.add('show');
+            document.getElementById('btn-add').style.display = 'none';
+            document.getElementById('dash-heading').innerText = 'All Complaints';
+        }
+        if (userType === 'student') {
+            document.getElementById('my-stats-box').classList.remove('hidden');
+        }
+        startSync();
+    }
+
+    window.toggleForm = () => {
+        dupDismissed = false;
+        document.getElementById('dup-warning').style.display = 'none';
+        document.getElementById('submit-btn').style.display = 'block';
+        document.getElementById('form-container').classList.toggle('hidden');
+    };
+
+    // ── Smart Duplicate Detector ──────────────────────────────
+    // Levenshtein distance for fuzzy matching
+    function levenshtein(a, b) {
+        const m = a.length, n = b.length;
+        const dp = Array.from({length:m+1}, (_,i) => Array.from({length:n+1}, (_,j) => i===0?j:j===0?i:0));
+        for (let i=1;i<=m;i++) for(let j=1;j<=n;j++)
+            dp[i][j] = a[i-1]===b[j-1] ? dp[i-1][j-1] : 1+Math.min(dp[i-1][j],dp[i][j-1],dp[i-1][j-1]);
+        return dp[m][n];
+    }
+    function similarity(a, b) {
+        const maxLen = Math.max(a.length, b.length);
+        if (maxLen === 0) return 1;
+        return 1 - levenshtein(a.toLowerCase(), b.toLowerCase()) / maxLen;
+    }
+
+    window.checkDuplicates = () => {
+        if (dupDismissed) return;
+        const input = document.getElementById('f-title').value.trim();
+        if (input.length < 4) { document.getElementById('dup-warning').style.display='none'; return; }
+
+        const matches = allComplaints.filter(c =>
+            c.status !== 'Resolved' && similarity(input, c.title) > 0.45
+        ).slice(0, 3);
+
+        const box = document.getElementById('dup-warning');
+        const items = document.getElementById('dup-items');
+
+        if (matches.length === 0) { box.style.display='none'; return; }
+
+        items.innerHTML = matches.map(c => `
+            <div class="dup-item" onclick="voteFromDup('${c.id}')">
+                <div>
+                    <div class="dup-item-title">${c.title}</div>
+                    <div class="dup-item-meta">📍 ${c.location} · ${c.votes} votes · ${c.status}</div>
+                </div>
+                <button class="dup-vote-btn" onclick="event.stopPropagation();voteFromDup('${c.id}')">▲ Upvote</button>
+            </div>`
+        ).join('');
+        box.style.display = 'block';
+        document.getElementById('submit-btn').style.display = 'none';
+    };
+
+    window.dismissDup = () => {
+        dupDismissed = true;
+        document.getElementById('dup-warning').style.display = 'none';
+        document.getElementById('submit-btn').style.display = 'block';
+    };
+
+    window.voteFromDup = async (id) => {
+        await handleVote(id);
+        document.getElementById('form-container').classList.add('hidden');
+        document.getElementById('f-title').value = '';
+        document.getElementById('f-desc').value  = '';
+        dupDismissed = false;
+    };
+
+    // ── Submit Complaint ─────────────────────────────────────
+    window.sendToFirebase = async () => {
+        const title = document.getElementById('f-title').value.trim();
+        const loc   = document.getElementById('f-loc').value;
+        const desc  = document.getElementById('f-desc').value.trim();
+        if (!title) return alert("Please provide a title.");
+        try {
+            await addDoc(collection(db, "complaints"), {
+                title, location:loc, description:desc,
+                votes:0, status:"Open",
+                createdAt:serverTimestamp(),
+                votedBy:[], studentId:currentUserId
+            });
+            document.getElementById('form-container').classList.add('hidden');
+            document.getElementById('f-title').value = '';
+            document.getElementById('f-desc').value  = '';
+            dupDismissed = false;
+        } catch(err){ alert("Error: "+err.message); }
+    };
+
+    // ── Vote ─────────────────────────────────────────────────
+    window.handleVote = async (id) => {
+        const item = complaintsMap[id];
+        if (!item) return;
+        if ((item.votedBy||[]).includes(currentUserId)) return alert("You've already upvoted this.");
+        await updateDoc(doc(db,"complaints",id),{ votes:increment(1), votedBy:arrayUnion(currentUserId) });
+    };
+
+    // ── Update Status ────────────────────────────────────────
+    window.updateStatus = async (id, s) => {
+        await updateDoc(doc(db,"complaints",id),{ status:s });
+    };
+
+    // ── Real-time Sync ───────────────────────────────────────
+    function startSync() {
+        const q = query(collection(db,"complaints"), orderBy("votes","desc"));
+        onSnapshot(q, (snapshot) => {
+            allComplaints = snapshot.docs.map(d=>({id:d.id,...d.data()}));
+            complaintsMap = Object.fromEntries(allComplaints.map(c=>[c.id,c]));
+            renderUI();
+            renderLeaderboard();
+        });
+    }
+
+    // ── Render Complaints ────────────────────────────────────
+    window.renderUI = () => {
+        const filterLoc   = document.getElementById('filter-loc').value;
+        const mainList    = document.getElementById('main-list');
+        const overdueList = document.getElementById('overdue-list');
+        mainList.innerHTML = ''; overdueList.innerHTML = '';
+        let visible=0, overdueCount=0;
+
+        allComplaints.forEach((item,idx) => {
+            if (filterLoc!=="All" && item.location!==filterLoc) return;
+            visible++;
+            const date     = item.createdAt?.toDate() || new Date();
+            const diffDays = Math.floor((new Date()-date)/(86400000));
+            const isOverdue= diffDays>=10 && item.status!=="Resolved";
+            const statusClass = item.status==='Open'?'status-open':item.status==='In Progress'?'status-progress':'status-resolved';
+            const hasVoted = (item.votedBy||[]).includes(currentUserId);
+            const delay    = Math.min(idx*0.04,0.3);
+
+            mainList.innerHTML += `
+            <div class="complaint-card ${isOverdue?'overdue':''}" style="animation-delay:${delay}s">
+                <div class="vote-box">
+                    <button class="vote-btn ${hasVoted?'voted':''}" onclick="handleVote('${item.id}')" title="${hasVoted?'Already voted':'Upvote'}">▲</button>
+                    <div class="vote-count">${item.votes}</div>
+                    <div class="vote-label">votes</div>
+                </div>
+                <div class="card-content">
+                    <div class="card-header">
+                        <div class="card-title">${item.title}</div>
+                        <span class="status-pill ${statusClass}">${item.status}</span>
+                    </div>
+                    ${item.description?`<p class="card-desc">${item.description}</p>`:''}
+                    <div class="card-footer">
+                        <div class="card-meta">
+                            <span class="card-meta-item">📍 ${item.location}</span>
+                            <span class="card-meta-item">📅 ${date.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})}</span>
+                            ${item.studentId?`<span class="reporter-chip">👤 ${item.studentId}</span>`:''}
+                            ${isOverdue?`<span class="card-meta-item" style="color:#c2410c;font-weight:600;">⚠ ${diffDays}d overdue</span>`:''}
+                        </div>
+                        ${userType==='admin'?`
+                        <div class="card-actions">
+                            <button onclick="updateStatus('${item.id}','In Progress')" class="btn-status btn-in-progress">In Progress</button>
+                            <button onclick="updateStatus('${item.id}','Resolved')"    class="btn-status btn-resolve">Resolve ✓</button>
+                        </div>`:''}
+                    </div>
+                </div>
+            </div>`;
+
+            if (isOverdue && userType==='admin') {
+                overdueCount++;
+                overdueList.innerHTML += `<div class="overdue-card"><div class="overdue-card-title">${item.title}</div><div class="overdue-card-days">${diffDays} days · ${item.location}</div></div>`;
+            }
+        });
+
+        if (visible===0) mainList.innerHTML = `<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">No complaints for this location.</div></div>`;
+        const oe = document.getElementById('overdue-empty');
+        if (oe) overdueCount===0 ? oe.classList.remove('hidden') : oe.classList.add('hidden');
+    };
+
+    // ── Reputation Engine ────────────────────────────────────
+    function calcPoints(studentId) {
+        let pts = 0, filed = 0, resolved = 0, votesReceived = 0;
+        allComplaints.forEach(c => {
+            if (c.studentId === studentId) {
+                filed++;
+                pts += 10;                          // +10 for filing
+                if (c.status === 'Resolved') { resolved++; pts += 25; } // +25 resolved
+                pts += (c.votes||0) * 3;            // +3 per upvote received
+                votesReceived += (c.votes||0);
+            }
+        });
+        // +2 per vote cast by this student
+        const votesCast = allComplaints.filter(c => (c.votedBy||[]).includes(studentId)).length;
+        pts += votesCast * 2;
+        return { pts, filed, resolved, votesReceived, votesCast };
+    }
+
+    function getBadges({ pts, filed, resolved, votesReceived }) {
+        const badges = [];
+        if (pts >= 200) badges.push({ label:'🏆 Champion',    cls:'badge-champion' });
+        else if (pts >= 100) badges.push({ label:'⭐ Top Reporter', cls:'badge-gold' });
+        else if (pts >= 50)  badges.push({ label:'🌟 Active',        cls:'badge-advocate' });
+        else                 badges.push({ label:'🌱 Newcomer',      cls:'badge-newcomer' });
+        if (filed >= 5)    badges.push({ label:`📝 ${filed} Filed`,    cls:'badge-reporter' });
+        if (resolved >= 3) badges.push({ label:`✅ ${resolved} Resolved`, cls:'badge-advocate' });
+        if (votesReceived >= 10) badges.push({ label:`▲ ${votesReceived} Upvotes`, cls:'badge-gold' });
+        return badges;
+    }
+
+    function renderLeaderboard() {
+        const lbList = document.getElementById('lb-list');
+        if (!lbList) return;
+
+        // Collect all unique student IDs
+        const studentSet = new Set();
+        allComplaints.forEach(c => { if (c.studentId) studentSet.add(c.studentId); });
+        // Also add voters
+        allComplaints.forEach(c => (c.votedBy||[]).forEach(v => studentSet.add(v)));
+
+        // Build leaderboard data
+        let rows = [...studentSet].map(sid => ({ id:sid, ...calcPoints(sid) }));
+        rows.sort((a,b) => b.pts - a.pts);
+
+        // Update my stats
+        if (userType === 'student') {
+            const mine = rows.find(r => r.id === currentUserId) || calcPoints(currentUserId);
+            document.getElementById('my-pts').innerText       = mine.pts || 0;
+            document.getElementById('my-filed').innerText     = mine.filed || 0;
+            document.getElementById('my-resolved').innerText  = mine.resolved || 0;
+            document.getElementById('my-votes-cast').innerText= mine.votesCast || 0;
+            const myBadges = getBadges(mine);
+            document.getElementById('my-badges-box').innerHTML = myBadges.map(b=>`<span class="badge ${b.cls}">${b.label}</span>`).join(' ');
+        }
+
+        if (rows.length === 0) {
+            lbList.innerHTML = `<div class="empty-state"><div class="empty-icon">🏅</div><div class="empty-text">No data yet. File complaints to appear here!</div></div>`;
+            return;
+        }
+
+        lbList.innerHTML = rows.map((r, idx) => {
+            const rank   = idx + 1;
+            const badges = getBadges(r);
+            const isMe   = r.id === currentUserId;
+            const rankEmoji = rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':rank;
+            const initials  = r.id.replace(/[^A-Z0-9]/gi,'').slice(0,2).toUpperCase();
+            const delay = Math.min(idx*0.05, 0.4);
+
+            return `
+            <div class="lb-row rank-${Math.min(rank,4)} ${isMe?'is-me':''}" style="animation-delay:${delay}s">
+                <div class="lb-rank">${rankEmoji}</div>
+                <div class="lb-avatar">${initials}</div>
+                <div class="lb-info">
+                    <div class="lb-name">
+                        ${r.id}
+                        ${isMe ? '<span class="me-tag">You</span>' : ''}
+                    </div>
+                    <div class="lb-badges">
+                        ${badges.map(b=>`<span class="badge ${b.cls}">${b.label}</span>`).join('')}
+                    </div>
+                </div>
+                <div class="lb-points-col">
+                    <div class="lb-points">${r.pts}</div>
+                    <div class="lb-points-label">points</div>
+                </div>
+            </div>`;
+        }).join('');
+    }
+</script>
+
+</body>
+</html>
