@@ -2,47 +2,52 @@
   <img src="./img.png" alt="Project Banner" width="100%">
 </p>
 
-# [Project Name] 🎯
+# QuickFix 🎯
 
 ## Basic Details
 
-### Team Name: [Name]
+### Team Name: Warriors
 
 ### Team Members
-- Member 1: [Name] - [College]
-- Member 2: [Name] - [College]
+- Member 1: Niya Sabu -College of Engineering Trivandrum
+- Member 2: Keerthana K Menon - College of Engineering Trivandrum
 
 ### Hosted Project Link
 [mention your project hosted link here]
 
 ### Project Description
-[2-3 lines about what your project does]
+QuickFix is a smart, real-time campus complaint management portal that allows students to report issues, upvote existing problems, and track resolution status transparently.
+
+It introduces community voting, duplicate detection, and a gamified leaderboard to prioritize urgent issues and encourage active participation.
 
 ### The Problem statement
-[What problem are you solving?]
+In many campuses:
+*Complaints are reported repeatedly
+*No transparency in resolution status
+*No prioritization system
+*Students don’t know if their voice matters
+*Maintenance teams struggle to track urgency
+This leads to delays, miscommunication, and frustration.
 
 ### The Solution
-[How are you solving it?]
-
----
+QuickFix solves this by:
+* Allowing students to file complaints digitally
+* Detecting similar complaints using fuzzy matching
+* Enabling upvotes to prioritize issues
+* Showing real-time status updates (Open → In Progress → Resolved)
+* Highlighting overdue complaints for admins
+* Introducing a leaderboard system to gamify civic participation
 
 ## Technical Details
 
 ### Technologies/Components Used
 
 **For Software:**
-- Languages used: [e.g., JavaScript, Python, Java]
-- Frameworks used: [e.g., React, Django, Spring Boot]
-- Libraries used: [e.g., axios, pandas, JUnit]
-- Tools used: [e.g., VS Code, Git, Docker]
-
-**For Hardware:**
-- Main components: [List main components]
-- Specifications: [Technical specifications]
-- Tools required: [List tools needed]
-
----
-
+- Languages used: HTML,CSS and JavaScript
+- Frameworks used:none
+- Libraries used:Firebase SDK (Firestore, Hosting)
+- Tools used: VS Code,Git and Firebase Console
+  
 ## Features
 
 List the key features of your project:
