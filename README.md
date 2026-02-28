@@ -1,8 +1,9 @@
+
 <p align="center">
   <img src="./img.png" alt="Project Banner" width="100%">
 </p>
 
-# QuickFix 🎯
+# QuickFix 
 
 ## Basic Details
 
@@ -16,27 +17,20 @@
 [mention your project hosted link here]
 
 ### Project Description
-QuickFix is a smart, real-time campus complaint management portal that allows students to report issues, upvote existing problems, and track resolution status transparently.
+Quickfix is a real-time campus complaint management designed to bridge the communication gap between students and administrative maintenance teams.
 
-It introduces community voting, duplicate detection, and a gamified leaderboard to prioritize urgent issues and encourage active participation.
+
 
 ### The Problem statement
-In many campuses:
-*Complaints are reported repeatedly
-*No transparency in resolution status
-*No prioritization system
-*Students don’t know if their voice matters
-*Maintenance teams struggle to track urgency
-This leads to delays, miscommunication, and frustration.
+Issues like broken fan,broken light,water leakage etc are not addressed by most of the campus.These are gone unseen and are not found with solutions.To make sure the correct regulation and rectificatiion of these issues we bring to you The Quickfix App
 
 ### The Solution
-QuickFix solves this by:
-* Allowing students to file complaints digitally
-* Detecting similar complaints using fuzzy matching
-* Enabling upvotes to prioritize issues
-* Showing real-time status updates (Open → In Progress → Resolved)
-* Highlighting overdue complaints for admins
-* Introducing a leaderboard system to gamify civic participation
+Quickfix provides you:
+* A platform to address your concerns and problems
+* a way to build social communication and unity
+* find the bunch of people having the sam issue as you and upvote if you are facing the same
+* you need not to file a new complaint if you are facing the same issue as others ,you can just upvote
+* A completely updating leaderboard to promote civic participation in the same
 
 ## Technical Details
 
@@ -51,10 +45,10 @@ QuickFix solves this by:
 ## Features
 
 List the key features of your project:
-- Feature 1: [Description]
-- Feature 2: [Description]
-- Feature 3: [Description]
-- Feature 4: [Description]
+- Feature 1: Helps in identifying the same issue faced by students by using the upvote button.
+- Feature 2:The one issue with the most votes gets the top priority and gets soon resolved
+- Feature 3: A point b.
+- Feature 4: Admin Urgency Tracking: A dedicated "Overdue" sidebar for administrators that highlights complaints that haven't been addressed within the SLA (Service Level Agreement) period.
 
 ---
 
@@ -64,23 +58,17 @@ List the key features of your project:
 
 #### Installation
 ```bash
-[Installation commands - e.g., npm install, pip install -r requirements.txt]
+# Clone the repository
+git clone https://github.com/your-username/quickfix.git
+
+#Navigate to project directory
+cd quickfix
+
 ```
 
 #### Run
-```bash
-[Run commands - e.g., npm start, python app.py]
-```
+Open final.html directly in your browser
 
-### For Hardware:
-
-#### Components Required
-[List all components needed with specifications]
-
-#### Circuit Setup
-[Explain how to set up the circuit]
-
----
 
 ## Project Documentation
 
