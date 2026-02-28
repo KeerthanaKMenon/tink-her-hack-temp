@@ -14,7 +14,7 @@
 - Member 2: Keerthana K Menon - College of Engineering Trivandrum
 
 ### Hosted Project Link
-[mention your project hosted link here]
+https://tink-her-hack-temp-blue.vercel.app/
 
 ### Project Description
 Quickfix is a real-time campus complaint management designed to bridge the communication gap between students and administrative maintenance teams.
@@ -67,7 +67,7 @@ cd quickfix
 ```
 
 #### Run
-Open final.html directly in your browser
+Open index.html directly in your browser
 
 
 ## Project Documentation
@@ -78,7 +78,7 @@ Open final.html directly in your browser
 
 https://github.com/KeerthanaKMenon/tink-her-hack-temp/blob/main/Screenshot%202026-02-28%20180500.png(main screen)
 
-*Add caption explaining what this shows*
+
 
 #### Diagrams
 
